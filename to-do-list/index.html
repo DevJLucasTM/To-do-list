@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Lista de tarefas com filtros, feita com HTML, CSS e JavaScript puro.">
+  <title>Minhas Tarefas</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <main class="app">
+    <header class="app__topo">
+      <h1>Minhas Tarefas</h1>
+      <p class="app__data" id="data-hoje"></p>
+    </header>
+
+    <form class="nova-tarefa" id="form-nova">
+      <label for="campo-nova" class="sr-only">Nova tarefa</label>
+      <input
+        type="text"
+        id="campo-nova"
+        placeholder="O que precisa ser feito?"
+        maxlength="120"
+        autocomplete="off"
+        required
+      >
+      <button type="submit" aria-label="Adicionar tarefa">Adicionar</button>
+    </form>
+
+    <nav class="filtros" aria-label="Filtrar tarefas">
+      <button type="button" class="filtro" data-filtro="todas">Todas <span id="cont-todas">0</span></button>
+      <button type="button" class="filtro" data-filtro="pendentes">Pendentes <span id="cont-pendentes">0</span></button>
+      <button type="button" class="filtro" data-filtro="feitas">Feitas <span id="cont-feitas">0</span></button>
+    </nav>
+
+    <div class="progresso" aria-hidden="true">
+      <div class="progresso__barra" id="barra-progresso"></div>
+    </div>
+
+    <ul class="lista" id="lista" aria-live="polite"></ul>
+
+    <p class="vazio" id="vazio" hidden></p>
+
+    <footer class="app__rodape">
+      <span id="resumo"></span>
+      <button type="button" class="link" id="limpar-feitas">Limpar feitas</button>
+    </footer>
+
+    <p class="dica">Dica: clique duas vezes numa tarefa pra editar.</p>
+  </main>
+
+  <!-- Molde de cada item da lista. O JavaScript clona isso pra cada tarefa. -->
+  <template id="molde-tarefa">
+    <li class="tarefa">
+      <label class="tarefa__check">
+        <input type="checkbox">
+        <span class="tarefa__caixa" aria-hidden="true"></span>
+        <span class="sr-only">Marcar como feita</span>
+      </label>
+      <span class="tarefa__texto"></span>
+      <input type="text" class="tarefa__edicao" maxlength="120" hidden>
+      <button type="button" class="tarefa__apagar" aria-label="Apagar tarefa">×</button>
+    </li>
+  </template>
+</body>
+</html>

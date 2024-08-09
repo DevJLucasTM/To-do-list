@@ -1,0 +1,324 @@
+/* ==========================================================================
+   Variáveis: mudou aqui, muda no site todo.
+   O bloco de baixo troca as cores sozinho quando o sistema está no modo escuro.
+   ========================================================================== */
+:root {
+  --fundo: #f4f1ea;
+  --cartao: #ffffff;
+  --texto: #1f1d1a;
+  --texto-suave: #77716a;
+  --borda: #e4dfd5;
+  --destaque: #e0592a;
+  --destaque-texto: #ffffff;
+  --feito: #2f9e6e;
+  --sombra: 0 10px 30px rgba(60, 45, 20, 0.08);
+  --raio: 14px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --fundo: #171614;
+    --cartao: #22201d;
+    --texto: #f0ece4;
+    --texto-suave: #a39c91;
+    --borda: #36332e;
+    --destaque: #ff7a45;
+    --destaque-texto: #1a1410;
+    --feito: #4cc28e;
+    --sombra: 0 10px 30px rgba(0, 0, 0, 0.35);
+  }
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  background: var(--fundo);
+  color: var(--texto);
+  display: flex;
+  justify-content: center;
+  padding: 48px 16px;
+}
+
+button, input { font: inherit; color: inherit; }
+
+/* Esconde da tela mas continua sendo lido por leitores de tela */
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* ---------------------------------------------------------------- cartão */
+.app {
+  width: 100%;
+  max-width: 520px;
+  background: var(--cartao);
+  border: 1px solid var(--borda);
+  border-radius: var(--raio);
+  box-shadow: var(--sombra);
+  padding: 28px;
+  align-self: flex-start;
+}
+
+.app__topo h1 {
+  margin: 0;
+  font-size: 1.9rem;
+  letter-spacing: -0.02em;
+}
+
+.app__data {
+  margin: 4px 0 20px;
+  color: var(--texto-suave);
+  font-size: 0.9rem;
+}
+
+.app__data::first-letter { text-transform: uppercase; }
+
+/* ---------------------------------------------------------- nova tarefa */
+.nova-tarefa {
+  display: flex;
+  gap: 8px;
+}
+
+.nova-tarefa input {
+  flex: 1;
+  min-width: 0; /* sem isso, no celular o input empurra o botão pra fora */
+  padding: 12px 14px;
+  border: 1px solid var(--borda);
+  border-radius: 10px;
+  background: var(--fundo);
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.nova-tarefa input:focus { border-color: var(--destaque); }
+
+.nova-tarefa button {
+  flex-shrink: 0;
+  padding: 0 18px;
+  border: none;
+  border-radius: 10px;
+  background: var(--destaque);
+  color: var(--destaque-texto);
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.1s, filter 0.15s;
+}
+
+.nova-tarefa button:hover { filter: brightness(1.08); }
+.nova-tarefa button:active { transform: scale(0.97); }
+
+/* -------------------------------------------------------------- filtros */
+.filtros {
+  display: flex;
+  gap: 6px;
+  margin: 20px 0 12px;
+}
+
+.filtro {
+  flex: 1;
+  padding: 8px 10px;
+  border: 1px solid var(--borda);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--texto-suave);
+  cursor: pointer;
+  font-size: 0.9rem;
+  white-space: nowrap;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.filtro span {
+  display: inline-block;
+  min-width: 1.6em;
+  margin-left: 4px;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: var(--fundo);
+  font-size: 0.8rem;
+}
+
+.filtro:hover { color: var(--texto); }
+
+.filtro.ativo {
+  background: var(--texto);
+  border-color: var(--texto);
+  color: var(--cartao);
+}
+
+.filtro.ativo span { background: var(--cartao); color: var(--texto); }
+
+/* ------------------------------------------------------------ progresso */
+.progresso {
+  height: 4px;
+  background: var(--borda);
+  border-radius: 999px;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+
+.progresso__barra {
+  height: 100%;
+  width: 0;
+  background: var(--feito);
+  transition: width 0.3s ease;
+}
+
+/* ---------------------------------------------------------------- lista */
+.lista {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.tarefa {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 4px;
+  border-bottom: 1px solid var(--borda);
+}
+
+/* Só a tarefa que acabou de ser criada ganha animação */
+.tarefa.nova { animation: entrar 0.25s ease; }
+
+@keyframes entrar {
+  from { opacity: 0; transform: translateY(-4px); }
+}
+
+.tarefa__check {
+  position: relative;
+  display: flex;
+  cursor: pointer;
+}
+
+/* O checkbox de verdade fica invisível; a gente desenha um mais bonito */
+.tarefa__check input {
+  position: absolute;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  cursor: pointer;
+}
+
+.tarefa__caixa {
+  width: 22px;
+  height: 22px;
+  border: 2px solid var(--borda);
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.tarefa__check input:checked + .tarefa__caixa {
+  background: var(--feito);
+  border-color: var(--feito);
+}
+
+.tarefa__check input:checked + .tarefa__caixa::after {
+  content: "";
+  width: 5px;
+  height: 10px;
+  border: solid #fff;
+  border-width: 0 2px 2px 0;
+  transform: translateY(-1px) rotate(45deg);
+}
+
+.tarefa__check input:focus-visible + .tarefa__caixa {
+  outline: 2px solid var(--destaque);
+  outline-offset: 2px;
+}
+
+.tarefa__texto {
+  flex: 1;
+  word-break: break-word;
+  cursor: text;
+  transition: color 0.15s;
+}
+
+.tarefa.feita .tarefa__texto {
+  color: var(--texto-suave);
+  text-decoration: line-through;
+}
+
+.tarefa__edicao {
+  flex: 1;
+  padding: 6px 8px;
+  border: 1px solid var(--destaque);
+  border-radius: 8px;
+  background: var(--fundo);
+  outline: none;
+}
+
+.tarefa__apagar {
+  border: none;
+  background: none;
+  color: var(--texto-suave);
+  font-size: 1.4rem;
+  line-height: 1;
+  padding: 0 6px;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.15s, color 0.15s;
+}
+
+/* O × só aparece no hover (no celular, que não tem hover, fica sempre visível) */
+.tarefa:hover .tarefa__apagar,
+.tarefa__apagar:focus-visible { opacity: 1; }
+.tarefa__apagar:hover { color: var(--destaque); }
+
+@media (hover: none) {
+  .tarefa__apagar { opacity: 1; }
+}
+
+/* ------------------------------------------------------- vazio e rodapé */
+.vazio {
+  text-align: center;
+  color: var(--texto-suave);
+  padding: 32px 0 16px;
+  margin: 0;
+}
+
+.app__rodape {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 16px;
+  font-size: 0.85rem;
+  color: var(--texto-suave);
+}
+
+.link {
+  border: none;
+  background: none;
+  color: var(--texto-suave);
+  cursor: pointer;
+  padding: 0;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.link:hover { color: var(--destaque); }
+.link:disabled { opacity: 0.4; cursor: default; text-decoration: none; }
+
+.dica {
+  margin: 20px 0 0;
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--texto-suave);
+}
+
+@media (max-width: 420px) {
+  body { padding: 20px 10px; }
+  .app { padding: 20px; }
+  .nova-tarefa button { padding: 0 14px; }
+  .filtro { font-size: 0.8rem; padding: 8px 4px; }
+  .filtro span { margin-left: 2px; }
+}
