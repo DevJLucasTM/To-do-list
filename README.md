@@ -4,9 +4,6 @@ Lista de tarefas feita com **HTML, CSS e JavaScript puro**, sem framework e sem
 biblioteca nenhuma. As tarefas ficam salvas no **localStorage** do navegador,
 então continuam lá depois de fechar a aba.
 
-🔗 **Demo:** https://SEU-USUARIO.github.io/todo-list/
-
-![Captura de tela do app](screenshot.png)
 
 ## ✨ Funcionalidades
 
